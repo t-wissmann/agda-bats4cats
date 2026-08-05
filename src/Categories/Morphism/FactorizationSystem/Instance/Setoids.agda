@@ -196,8 +196,8 @@ diagonal-filler {A} {C} {B} {D} {f} {g} e m g∘e≈m∘f =
       }
 
 
-[Surj,Inj]-factorizations : [ Surj , Inj ]-structured (Setoids c ℓ)
-[Surj,Inj]-factorizations = record
+[Surj,Inj]-structured : [ Surj , Inj ]-structured (Setoids c ℓ)
+[Surj,Inj]-structured = record
   { ℰ-resp-≈ = λ {X} {Y} {f} {g} → Surj-resp-≈ {X} {Y} {f} {g}
   ; ℳ-resp-≈ = λ {X} {Y} {f} {g} → Inj-resp-≈ {X} {Y} {f} {g}
   ; factor = λ {X} f → record
