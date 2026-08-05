@@ -89,3 +89,6 @@ record MorphismClassMember {p : Level} (M : MorphismClass p) (A B : Obj) : Set (
     mor : A ⇒ B
     in-class : M mor
 
+mor∈class : ∀ {p : Level} {M : MorphismClass p} {A B : Obj} {h : A ⇒ B} → M h → MorphismClassMember M A B
+mor∈class {h = h} h∈M = record { mor = h ; in-class = h∈M }
+
