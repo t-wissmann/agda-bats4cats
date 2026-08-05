@@ -74,10 +74,7 @@ record UniqueDiagonal {A B X Y} (i : A ⇒ B) (f : A ⇒ X)
 --------------------------------------------------------------------------------
 -- Lifings of Morphism Classes
 
--- Shorthand for denoting a class of morphisms.
-MorphismClass : (p : Level) → Set (o ⊔ ℓ ⊔ suc p)
-MorphismClass p = ∀ {X Y} → X ⇒ Y → Set p
-
+open import Categories.Morphism.Lifts 𝒞 using (MorphismClass)
 ≈-closed : {p : Level} → (M : MorphismClass p) → Set (o ⊔ ℓ ⊔ e ⊔ p)
 ≈-closed M = ∀ {X Y} → {f g : X ⇒ Y} → f ≈ g → M f → M g
 
