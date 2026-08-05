@@ -75,6 +75,11 @@ record UniqueDiagonal {A B X Y} (i : A ⇒ B) (f : A ⇒ X)
 -- Lifings of Morphism Classes
 
 open import Categories.Morphism.Lifts 𝒞 using (MorphismClass)
+
+_⊆_ : {p q : Level} → MorphismClass p → MorphismClass q → Set (o ⊔ ℓ ⊔ p ⊔ q)
+M ⊆ N = ∀ {X Y} → {f : X ⇒ Y} → M f → N f
+
+
 ≈-closed : {p : Level} → (M : MorphismClass p) → Set (o ⊔ ℓ ⊔ e ⊔ p)
 ≈-closed M = ∀ {X Y} → {f g : X ⇒ Y} → f ≈ g → M f → M g
 

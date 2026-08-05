@@ -2,7 +2,7 @@
 
 open import Categories.Category.Core using (Category)
 open import Categories.Category using (module Definitions)
-open import Categories.Morphism.Lifts-Patched using (MorphismClass)
+open import Categories.Morphism.Lifts using (MorphismClass)
 
 
 -- Consider a category 𝒞 and two morphism classes ℰ and ℳ.
