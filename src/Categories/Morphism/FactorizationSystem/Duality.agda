@@ -2,7 +2,8 @@
 
 open import Level
 open import Categories.Category
-open import Categories.Morphism.Lifts-Patched using (MorphismClass; Diagonal; MorphismClassMember; UniqueDiagonal)
+open import Categories.Morphism.Lifts using (MorphismClass)
+open import Categories.Morphism.Lifts-Patched using (Diagonal; MorphismClassMember; UniqueDiagonal)
 open import Categories.Morphism using (IsIso; Iso)
 
 module Categories.Morphism.FactorizationSystem.Duality where
@@ -16,7 +17,6 @@ private
     ℰ : MorphismClass 𝒞 ℓℰ
     ℳ : MorphismClass 𝒞 ℓℳ
 
-open Categories.Morphism.Lifts-Patched using (MorphismClass)
 open import Categories.Morphism.FactorizationSystem
 open import Categories.Morphism.FactorizationSystem.Core
 
