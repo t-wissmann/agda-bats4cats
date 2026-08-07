@@ -37,6 +37,15 @@ env:
 
   AGDA: agda --auto-inline -Werror +RTS -M6G -H3.5G -A128M -RTS -i . -i src/
 
+permissions:
+  contents: read
+
+# Allow one concurrent deployment, but let a running one finish so we
+# never interrupt an in-progress Pages deployment.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   check:
     name: Check src/index.agda
@@ -46,17 +55,6 @@ jobs:
       # By default github actions do not pull the repo
       - name: Checkout agda-bats4cats
         uses: actions/checkout@v7
-
-########################################################################
-## SETTINGS
-########################################################################
-
-      - name: Initialise variables
-        run: |
-          # Only deploy if the build follows from pushing to main
-          if [[ '${{ github.ref }}' == 'refs/heads/main' ]]; then
-             echo "AGDA_DEPLOY=true" >> "${GITHUB_ENV}"
-          fi
 
 ########################################################################
 ## INSTALLATION STEPS
@@ -109,16 +107,10 @@ jobs:
       - name: Generate HTML
         run: ${{ env.AGDA }} --html --html-dir html src/index.agda
 
-########################################################################
-## DEPLOYMENT
-########################################################################
-
-      - name: Deploy HTML
-        uses: JamesIves/github-pages-deploy-action@v4
-        if: success() && env.AGDA_DEPLOY
+      - name: Upload HTML as a Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: html
+          path: html
 
 ########################################################################
 ## CACHING: SAVE
@@ -135,3 +127,32 @@ jobs:
             ${{ github.workspace }}/_build
             ~/agda-categories/_build
           key: ${{ steps.cache.outputs.cache-primary-key }}
+
+########################################################################
+## DEPLOYMENT
+##
+## Deploying to GitHub Pages needs a dedicated job with its own
+## permissions and environment; see
+## https://github.com/actions/deploy-pages#readme
+##
+## This requires "Build and deployment > Source" to be set to
+## "GitHub Actions" in the repository's Pages settings.
+##
+########################################################################
+
+  deploy:
+    name: Deploy HTML to GitHub Pages
+    # Only deploy if the build follows from pushing to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
