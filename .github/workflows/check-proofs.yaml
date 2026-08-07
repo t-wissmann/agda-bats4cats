@@ -1,7 +1,7 @@
 name: Check Proofs
 on:
   push:
-    branches: ['master']
+    branches: ['main']
 jobs:
   check:
     # Using the template from https://github.com/marketplace/actions/setup-agda
