@@ -1,23 +1,137 @@
 name: Check Proofs
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+########################################################################
+## CONFIGURATION
+##
+## Key variables:
+##
+## AGDA_VERSION picks the version of Agda to use to build the library.
+##
+## STDLIB_VERSION picks the version of the stdlib to pull.
+##
+## CATEGORIES_REF picks the commit/branch/tag of agda-categories to pull.
+##
+## The rest:
+##
+## The AGDA variable specifies the command to use to build the library.
+## It currently passes the flag `-Werror` to ensure maximal compliance
+## with e.g. not relying on deprecated definitions.
+## The rest are some arbitrary runtime arguments that shape the way Agda
+## allocates and garbage collects memory. It should make things faster.
+## Limits can be bumped if the builds start erroring with out of memory
+## errors.
+##
+########################################################################
+
+env:
+  AGDA_VERSION: "2.8.0"
+  STDLIB_VERSION: "2.4"
+  CATEGORIES_REF: "master"
+
+  AGDA: agda --auto-inline -Werror +RTS -M6G -H3.5G -A128M -RTS -i . -i src/
+
 jobs:
   check:
-    # Using the template from https://github.com/marketplace/actions/setup-agda
     name: Check src/index.agda
-    runs-on: ubuntu-latest # or macOS-latest, or windows-latest
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
 
-      # Setup the latest version of Agda:
-      - uses: wenkokke/setup-agda@v2
+      # By default github actions do not pull the repo
+      - name: Checkout agda-bats4cats
+        uses: actions/checkout@v7
+
+########################################################################
+## SETTINGS
+########################################################################
+
+      - name: Initialise variables
+        run: |
+          # Only deploy if the build follows from pushing to main
+          if [[ '${{ github.ref }}' == 'refs/heads/main' ]]; then
+             echo "AGDA_DEPLOY=true" >> "${GITHUB_ENV}"
+          fi
+
+########################################################################
+## INSTALLATION STEPS
+########################################################################
+
+      - name: Install Agda
+        uses: agda/agda-setup-action@v1
+        id: setup
         with:
-          agda-version: '2.9.0'
-          agda-stdlib-version: '2.3'
-          agda-libraries: |
-            https://github.com/agda/agda-categories.git#v0.3.0
+          agda-version: ${{ env.AGDA_VERSION }}
+          agda-stdlib-version: ${{ env.STDLIB_VERSION }}
 
-      # Check greet.agda, which you can find in tests/agda:
-      - run: agda src/index.agda
-        working-directory: .
+      # agda-categories is not a released library we can ask the setup
+      # action for, so we clone it and register it with Agda by hand.
+      - name: Install agda-categories
+        run: |
+          git clone --depth 1 --branch "${CATEGORIES_REF}" \
+            https://github.com/agda/agda-categories "${HOME}/agda-categories"
+          echo "${HOME}/agda-categories/agda-categories.agda-lib" \
+            >> "${{ steps.setup.outputs.agda-dir }}/libraries"
+
+########################################################################
+## CACHING: RESTORE
+########################################################################
+
+      # This caching step allows us to save a lot of building time by
+      # saving the previous build.
+      - name: Restore cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: |
+            ${{ steps.setup.outputs.agda-dir }}
+            ${{ github.workspace }}/_build
+            ~/agda-categories/_build
+          key: ${{ runner.os }}-agda-${{ env.AGDA_VERSION }}-categories-${{ env.CATEGORIES_REF }}-commit-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-agda-${{ env.AGDA_VERSION }}-categories-${{ env.CATEGORIES_REF }}-
+
+########################################################################
+## TESTING
+########################################################################
+
+      - name: Check src/index.agda
+        run: ${{ env.AGDA }} src/index.agda
+
+      # Note that if you want to deploy html for different versions like the
+      # standard library does, you will need to be a bit more subtle in this
+      # step.
+      - name: Generate HTML
+        run: ${{ env.AGDA }} --html --html-dir html src/index.agda
+
+########################################################################
+## DEPLOYMENT
+########################################################################
+
+      - name: Deploy HTML
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: success() && env.AGDA_DEPLOY
+        with:
+          branch: gh-pages
+          folder: html
+
+########################################################################
+## CACHING: SAVE
+########################################################################
+
+      # This caching step allows us to save a lot of building time by
+      # saving the previous build.
+      - name: Save cache
+        uses: actions/cache/save@v6
+        if: always()
+        with:
+          path: |
+            ${{ steps.setup.outputs.agda-dir }}
+            ${{ github.workspace }}/_build
+            ~/agda-categories/_build
+          key: ${{ steps.cache.outputs.cache-primary-key }}
