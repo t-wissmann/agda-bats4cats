@@ -98,6 +98,10 @@ jobs:
 ## TESTING
 ########################################################################
 
+      - name: Create src/index.agda
+        run: |
+          git ls-files 'src/*.agda' | sed 's,^src/,import ,;s,\.[^.]*$,,;s,/,.,g' > src/index.agda
+
       - name: Check src/index.agda
         run: ${{ env.AGDA }} src/index.agda
 
