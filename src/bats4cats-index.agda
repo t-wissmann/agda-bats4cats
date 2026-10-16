@@ -17,4 +17,3 @@ import Categories.Morphism.Lifts-Patched
 import Categories.Morphism.Lifts-Patched.Properties
 import Categories.Object.Presentable
 import Helper-Definitions
-import bats4cats-index
