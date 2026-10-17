@@ -90,6 +90,6 @@ module _ {o ℓ e c ℓ'} {D : Category o ℓ e} {J : Functor D (Setoids (o ⊔ 
 
         same-cocone-morph : Cocones J [ id-cmorph ≈ (Cocones J [ inject-cmorph ∘ choice-cmorph ]) ]
         same-cocone-morph =
-            Colim.initial.!-unique₂
+            Colim.initial.¡-unique₂
               id-cmorph
               (Cocones J [ inject-cmorph ∘ choice-cmorph ])

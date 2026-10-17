@@ -33,7 +33,8 @@ open import Relation.Binary.Construct.Closure.Equivalence using (EqClosure)
 open import Relation.Binary.Construct.Closure.ReflexiveTransitive
 open import Relation.Binary.Bundles
 open import Categories.Category.Monoidal.Instance.Setoids using (Setoids-Cocartesian)
-open import Categories.Category.Cocartesian using (Cocartesian; BinaryCoproducts)
+open import Categories.Category.Cocartesian using (Cocartesian)
+open import Categories.Category.BinaryCoproducts using (BinaryCoproducts)
 
 
 open import Categories.Diagram.Colimit.Setoids-Colimit
@@ -322,8 +323,8 @@ canonical-cocone-is-limitting X =
         }
   in
   record {
-    ! = λ{C} → ! C ;
-    !-unique = λ {C} other {x} →
+    ¡ = λ{C} → ! C ;
+    ¡-unique = λ {C} other {x} →
     let
       -- given an other cocone morphism to C
       module C = Cocone C
@@ -441,5 +442,6 @@ Setoids-Accessible = record
                ; fin-presentable = λ i → Fin-is-presentable (lower i)
                ; build-from-fin = canonical-cocone-is-limitting
                ; canonical-has-prop = λ X → canonical-cat-is-filtered X
-               ; coproduct = λ A B _ _ →  BinaryCoproducts.coproduct (Cocartesian.coproducts (Setoids-Cocartesian {ℓ} {ℓ})) {A} {B}
+               ; coproduct = λ A B _ _ →
+                 BinaryCoproducts.coproduct (Cocartesian.coproducts (Setoids-Cocartesian {ℓ} {ℓ}))
                }

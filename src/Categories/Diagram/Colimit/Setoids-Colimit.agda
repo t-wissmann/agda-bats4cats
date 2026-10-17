@@ -296,8 +296,8 @@ module _ {o ℓ e c ℓ'} {D : Category o ℓ e} (J : Functor D (Setoids (o ⊔ 
             }
       in
       record {
-        ! = ump _ ;
-        !-unique = λ {E} w {x} →
+        ¡ = ump _ ;
+        ¡-unique = λ {E} w {x} →
           let
             module E = Cocone E
             module w = Cocone⇒ w

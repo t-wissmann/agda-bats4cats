@@ -33,7 +33,7 @@ on:
 env:
   AGDA_VERSION: "2.8.0"
   STDLIB_VERSION: "2.4"
-  CATEGORIES_REF: "v0.3.0"
+  CATEGORIES_REF: "master"
 
   AGDA: agda --auto-inline -Werror +RTS -M6G -H3.5G -A128M -RTS -i . -i src/
 

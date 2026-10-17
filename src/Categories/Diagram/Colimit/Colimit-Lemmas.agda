@@ -103,7 +103,7 @@ limitting-cocone-is-jointly-epic : ∀ {o′ ℓ′ e′} {J : Category o′ ℓ
                                  → IsLimitting cocone
                                  → jointly-epic (Cocone.ψ cocone)
 limitting-cocone-is-jointly-epic {G = G} cocone limitting {Z} {g} {h} equalize-g-h =
-  IsInitial.!-unique₂ limitting g-morph h-morph -- g-morph h-morph
+  IsInitial.¡-unique₂ limitting g-morph h-morph -- g-morph h-morph
   where
     open Category 𝒞
     open HomReasoning
@@ -217,19 +217,19 @@ FullSub-Colimit {D = D} {I = I} U J plain-C-colim lifted-colim-obj iso =
       record {
         arr = morph ;
         commute = λ {X} →
-          Cocone⇒.commute (C-colim.initial.! {A = C-other})
+          Cocone⇒.commute (C-colim.initial.¡ {A = C-other})
         }
       where
         module other = Cocone other
         C-other : Cocone (FullSub 𝒞 ∘F J)
         C-other = (F-map-Coconeˡ (FullSub 𝒞) other)
         morph : 𝒞 [ C-colim.coapex , U other.N ]
-        morph = Cocone⇒.arr (C-colim.initial.! {A = C-other})
+        morph = Cocone⇒.arr (C-colim.initial.¡ {A = C-other})
 
     Sub-Cocone-initial : IsInitial (Cocones J) Sub-Cocone
     Sub-Cocone-initial = record {
-      ! = Sub-Cocone-ump ;
-      !-unique = λ {other : Cocone J} cocone-morph →
+      ¡ = Sub-Cocone-ump ;
+      ¡-unique = λ {other : Cocone J} cocone-morph →
         let
           module other = Cocone other
           module cocone-morph = Cocone⇒ cocone-morph
@@ -242,7 +242,7 @@ FullSub-Colimit {D = D} {I = I} U J plain-C-colim lifted-colim-obj iso =
             arr = cocone-morph.arr ;
             commute = λ {X} → cocone-morph.commute }
         in
-        IsInitial.!-unique C-colim.initial.⊥-is-initial C-cocone-morph
+        IsInitial.¡-unique C-colim.initial.⊥-is-initial C-cocone-morph
       }
 
 HasCoproducts : Set _

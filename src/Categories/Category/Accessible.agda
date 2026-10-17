@@ -117,7 +117,7 @@ record Accessible : Set (o ⊔ suc ℓ ⊔ prop-level) where
   -- the big canonical cocone with all presentable objects is also (co-)limitting:
   presentable-colimit : ∀ (X : 𝒞.Obj) → IsLimitting (Cocone[ presentable-obj ↓ X ])
   presentable-colimit X = record {
-      ! = λ {K} → record {
+      ¡ = λ {K} → record {
         arr = fin-colimit.rep (pres-cocone-to-fin K) ;
         commute = λ{ {(A , A-pres), f} →
           let
@@ -149,10 +149,10 @@ record Accessible : Set (o ⊔ suc ℓ ⊔ prop-level) where
           K.ψ ((A , A-pres), f)
           ∎
           }};
-      !-unique = λ {K} f →
+      ¡-unique = λ {K} f →
         begin
         fin-colimit.rep (pres-cocone-to-fin K)
-            ≈⟨ fin-colimit.initial.!-unique (transform-cocone⇒ f) ⟩
+            ≈⟨ fin-colimit.initial.¡-unique (transform-cocone⇒ f) ⟩
         Cocone⇒.arr f
         ∎
         }

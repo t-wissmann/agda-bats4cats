@@ -1,19 +1,22 @@
+
+-- (Finitely) accessible categories:
+import Categories.Object.Presentable
 import Categories.Category.Accessible
 import Categories.Category.Accessible.Finitely
+
+-- Example: Setoids:
 import Categories.Category.Accessible.Instance.Setoids
-import Categories.Diagram.Canonical-Cocone
-import Categories.Diagram.Colimit.Colimit-Lemmas
-import Categories.Diagram.Colimit.Hom-Colimit-Choice
 import Categories.Diagram.Colimit.Instance.FinCoequalizer
 import Categories.Diagram.Colimit.Setoids-Choice
 import Categories.Diagram.Colimit.Setoids-Colimit
-import Categories.Diagram.Filtered
+
+-- Factorization systems:
 import Categories.Morphism.FactorizationSystem
-import Categories.Morphism.FactorizationSystem.Core
 import Categories.Morphism.FactorizationSystem.Duality
 import Categories.Morphism.FactorizationSystem.Instance.Setoids
 import Categories.Morphism.FactorizationSystem.Properties
+
 import Categories.Morphism.Lifts-Patched
 import Categories.Morphism.Lifts-Patched.Properties
-import Categories.Object.Presentable
+
 import Helper-Definitions
