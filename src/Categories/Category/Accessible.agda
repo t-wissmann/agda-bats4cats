@@ -51,6 +51,7 @@ import Categories.Diagram.Colimit.Setoids-Colimit
 open Hom
 
 open import Categories.Diagram.Colimit.Hom-Colimit-Choice 𝒞
+open import Categories.Diagram.Hom-Factorization
 
 
 record Accessible : Set (o ⊔ suc ℓ ⊔ prop-level) where
@@ -98,7 +99,7 @@ record Accessible : Set (o ⊔ suc ℓ ⊔ prop-level) where
     where
       -- we let the identity on X factor through the canonical
       -- diagram for X:
-      t : Triangle (canonical-colimit X) (𝒞.id{X})
+      t : Triangle (Colimit.colimit (canonical-colimit X)) (𝒞.id{X})
       t = hom-colim-choice
             (canonical-colimit X)
             X

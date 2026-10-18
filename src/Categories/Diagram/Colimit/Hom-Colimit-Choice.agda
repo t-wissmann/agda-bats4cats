@@ -21,6 +21,8 @@ open import Categories.Diagram.Colimit.Setoids-Colimit using (KernelPairs)
 open import Categories.Diagram.Colimit.Colimit-Lemmas
 open import Categories.Diagram.Filtered
 
+import Categories.Diagram.Hom-Factorization
+
 module Categories.Diagram.Colimit.Hom-Colimit-Choice
   {o ℓ} (𝒞 : Category o ℓ ℓ)
   where
@@ -41,6 +43,7 @@ module _
   where
 
   open Hom 𝒞
+  open Categories.Diagram.Hom-Factorization (Colimit.colimit colim)
 
   private
       module colim = Colimit colim
@@ -49,13 +52,13 @@ module _
 
       open Category 𝒞
 
-  record Triangle {P : 𝒞.Obj} (p : P ⇒ colim.coapex) : Set ℓ where
-    -- a factorization of a morphism through the diagram.
-    constructor triangle
-    field
-      x : 𝒟.Obj
-      p' : P ⇒ D.₀ x
-      commutes : p ≈ colim.proj x ∘ p'
+  -- record Triangle {P : 𝒞.Obj} (p : P ⇒ colim.coapex) : Set ℓ where
+  --   -- a factorization of a morphism through the diagram.
+  --   constructor triangle
+  --   field
+  --     x : 𝒟.Obj
+  --     p' : P ⇒ D.₀ x
+  --     commutes : p ≈ colim.proj x ∘ p'
 
   -- If a hom-functor 𝒞(P,-) preserves a colimit C, this gives rise to a
   -- factorization of morphisms P ⇒ C through the diagram:
@@ -99,7 +102,10 @@ module _
   UniqueColimitFactorization : 𝒞.Obj → Set _
   UniqueColimitFactorization P =
       ∀ {i : 𝒟.Obj} (f g : P ⇒ D.₀ i) → colim.proj i ∘ f ≈ colim.proj i ∘ g →
-        Σ[ i' ∈ 𝒟.Obj ] Σ[ f' ∈ i 𝒟.⇒ i' ] Σ[ g' ∈ i 𝒟.⇒ i' ] (D.₁ f' ∘ f ≈ D.₁ g' ∘ g)
+        Σ[ i' ∈ 𝒟.Obj ]
+          Σ[ f' ∈ i 𝒟.⇒ i' ]
+          Σ[ g' ∈ i 𝒟.⇒ i' ]
+          (D.₁ f' ∘ f ≈ D.₁ g' ∘ g)
 
   -- The same property, but with a single identifying morphism:
   UniqueColimitFactorization₁ : 𝒞.Obj → Set _

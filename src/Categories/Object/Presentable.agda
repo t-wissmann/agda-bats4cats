@@ -19,6 +19,7 @@ private
   module 𝒞 = Category 𝒞
 
 open import Categories.Diagram.Colimit.Hom-Colimit-Choice 𝒞
+open import Categories.Diagram.Hom-Factorization
 open import Categories.Object.Coproduct (𝒞)
 open import Categories.Morphism (𝒞)
 open import Categories.Morphism.Reasoning.Core 𝒞
@@ -96,7 +97,7 @@ presentable-coproduct {A} {B} coprod P⇒filtered A-pres B-pres 𝒟 𝒟-has-P 
           J-colim.proj Bo ∘ p' ∘ i₂ ≈⟨ sym-assoc ⟩
           (J-colim.proj Bo ∘ p') ∘ i₂
           ∎
-        goal : Triangle J-colim [f,g]
+        goal : Triangle (Colimit.colimit J-colim) [f,g]
         goal = record {
           x = Bo ;
           p' = p' ;
