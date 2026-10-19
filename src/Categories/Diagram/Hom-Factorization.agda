@@ -54,7 +54,7 @@ record identified-in-diagram₂ {P : 𝒞.Obj}
     ij : 𝒟.Obj
     f' : i 𝒟.⇒ ij
     g' : j 𝒟.⇒ ij
-    Dd∘f≈Dd∘g : D.₁ f' ∘ f ≈ D.₁ g' ∘ g
+    Df'∘f≈Dg'∘g : D.₁ f' ∘ f ≈ D.₁ g' ∘ g
 
   -- identified₁ : MergeAllParallelMorphisms 𝒟 → identified-in-diagram f g
   -- identified₁ merge-all = record
@@ -99,7 +99,7 @@ record Essentially-Unique-Cocone-Factor {P : 𝒞.Obj} (p : P ⇒ cocone.N)  : S
     { ij = ij
     ; f' = d 𝒟.∘ i₁ 
     ; g' = d 𝒟.∘ i₂ 
-    ; Dd∘f≈Dd∘g = begin
+    ; Df'∘f≈Dg'∘g = begin
         D.₁ (d 𝒟.∘ i₁) ∘ f ≈⟨ pushˡ D.homomorphism ⟩
         D.₁ d ∘ D.₁ i₁ ∘ f ≈⟨ Dd∘f≈Dd∘g ⟩
         D.₁ d ∘ D.₁ i₂ ∘ g ≈⟨ pushˡ D.homomorphism ⟨
