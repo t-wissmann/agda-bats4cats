@@ -70,3 +70,13 @@ UniqueCoconeFactorization : 𝒞.Obj → Set _
 UniqueCoconeFactorization P =
     ∀ {i : 𝒟.Obj} (f g : P ⇒ D.₀ i) → cocone.ψ i ∘ f ≈ cocone.ψ i ∘ g →
       identified-in-diagram f g
+
+
+record Essentially-Unique-Cocone-Factor {P : 𝒞.Obj} (p : P ⇒ cocone.N)  : Set (o' ⊔ ℓ ⊔ ℓ' ⊔ e) where
+  field
+    exists : Triangle p
+    essentially-unique : ∀ (j : 𝒟.Obj)
+                         → (f g : P ⇒ D.₀ j)
+                         → (cocone.ψ j ∘ f ≈ p)
+                         → (cocone.ψ j ∘ g ≈ p)
+                         → identified-in-diagram₂ f g
