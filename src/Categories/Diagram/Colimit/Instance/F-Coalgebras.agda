@@ -147,6 +147,7 @@ apply-F-to-Coapex J {N} coapex = record
     module coapex = Coapex coapex
     module J = Functor J
 
+-- Same as apply-F-to-Coapex but now for Cocones (hiding the tip)
 apply-F-to-Cocone-coapex : {o' ℓ' e' : Level} → {D : Category o' ℓ' e'} → (J : Functor D (F-Coalgebras F))
   → Cocone (forget-Coalgebra ∘F J)
   → Cocone (forget-Coalgebra ∘F J)
