@@ -15,6 +15,7 @@ private
 
 open import Level
 
+open import Categories.Morphism.Reasoning 𝒞
 open import Categories.Category.Construction.F-Coalgebras
 open import Categories.Functor.Coalgebra
 open import Categories.Object.Initial using (IsInitial)
@@ -122,39 +123,35 @@ F-Coalgebras-Limitting-Cocone {o'} {ℓ'} {e'} {D} J K UK-limitting =
             ∎
         }
 
+-- For every cocone of a diagram, of coalgebras, we can apply the functor F to the cocone tip
+apply-F-to-Coapex : {o' ℓ' e' : Level}
+    → {D : Category o' ℓ' e'}
+    → (J : Functor D (F-Coalgebras F))
+    → {N : 𝒞.Obj}
+    → Coapex (forget-Coalgebra ∘F J) N
+    → Coapex (forget-Coalgebra ∘F J) (F.₀ N)
+apply-F-to-Coapex J {N} coapex = record
+  { ψ = λ X → F.₁ (coapex.ψ X) ∘ F-Coalgebra.α (J.₀ X)
+  ; commute = λ {X} {Y} h →
+      let module h = F-Coalgebra-Morphism (J.F₁ h) in
+      begin
+      (F.₁ (coapex.ψ Y) ∘ F-Coalgebra.α (J.₀ Y)) ∘ h.f   ≈⟨ assoc ⟩
+      F.₁ (coapex.ψ Y) ∘ F-Coalgebra.α (J.₀ Y) ∘ h.f     ≈⟨ refl⟩∘⟨ h.commutes ⟩
+      F.₁ (coapex.ψ Y) ∘ F.₁ h.f ∘ F-Coalgebra.α (J.₀ X) ≈⟨ pushˡ F.homomorphism ⟨
+      F.₁ (coapex.ψ Y ∘ h.f) ∘ F-Coalgebra.α (J.₀ X)     ≈⟨ F.F-resp-≈ (coapex.commute h) ⟩∘⟨refl ⟩
+      F.₁ (coapex.ψ X) ∘ F-Coalgebra.α (J.₀ X)           ∎
+  }
+  where
+    open Category 𝒞
+    open HomReasoning
+    module coapex = Coapex coapex
+    module J = Functor J
+
 apply-F-to-Cocone-coapex : {o' ℓ' e' : Level} → {D : Category o' ℓ' e'} → (J : Functor D (F-Coalgebras F))
   → Cocone (forget-Coalgebra ∘F J)
   → Cocone (forget-Coalgebra ∘F J)
 apply-F-to-Cocone-coapex J cocone =
-  record { coapex = record {
-    -- for every object X in the diagram:
-    ψ = λ A →
-      -- the cocone injection is the coalgebra structure followed
-      -- by the original cocone injection under the functor
-      F.₁ (cocone.ψ A) ∘ (F-Coalgebra.α (J.₀ A))
-    ;
-    -- for every hom h in the diagram:
-    commute = λ {A} {A'} h →
-      let
-        module h = F-Coalgebra-Morphism (J.F₁ h)
-      in
-      begin
-      (F.₁ (cocone.ψ A') ∘ F-Coalgebra.α (J.F₀ A')) ∘ h.f        ≈⟨ assoc ⟩
-      F.₁ (cocone.ψ A') ∘ F-Coalgebra.α (J.F₀ A') ∘ h.f          ≈⟨ refl⟩∘⟨ h.commutes ⟩
-      F.₁ (cocone.ψ A') ∘ F.₁ h.f ∘ F-Coalgebra.α (J.F₀ A)        ≈⟨ sym-assoc ⟩
-      (F.₁ (cocone.ψ A') ∘ F.₁ h.f) ∘ F-Coalgebra.α (J.F₀ A)
-         ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩
-      F.₁ (cocone.ψ A' ∘ h.f) ∘ F-Coalgebra.α (J.F₀ A)
-         ≈⟨ F.F-resp-≈ (cocone.commute h) ⟩∘⟨refl ⟩
-      F.₁ (cocone.ψ A) ∘ F-Coalgebra.α (J.F₀ A)
-      ∎
-    }
-  }
-  where
-    module J = Functor J
-    open Category 𝒞
-    open HomReasoning
-    module cocone = Cocone cocone
+  record { coapex = apply-F-to-Coapex J (Cocone.coapex cocone) }
 
 F-Coalgebras-Lift-Cocone : {o' ℓ' e' : Level} → {D : Category o' ℓ' e'} → (J : Functor D (F-Coalgebras F))
   → Colimit (forget-Coalgebra ∘F J) → Cocone J
