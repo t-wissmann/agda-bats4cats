@@ -43,6 +43,19 @@ record identified-in-diagram {P : 𝒞.Obj} {i : 𝒟.Obj} (f g : P ⇒ D.₀ i)
     d : i 𝒟.⇒ j
     Dd∘f≈Dd∘g : D.₁ d ∘ f ≈ D.₁ d ∘ g
 
+identified-in-diagram-cancelˡ :
+  {P : 𝒞.Obj} {i i' : 𝒟.Obj} (f g : P ⇒ D.₀ i) (h : i 𝒟.⇒ i')
+  → identified-in-diagram (D.₁ h ∘ f) (D.₁ h ∘ g)
+  → identified-in-diagram f g
+identified-in-diagram-cancelˡ f g h ident-hf-hg =
+  record { j = j ; d = d 𝒟.∘ h ; Dd∘f≈Dd∘g = begin
+    D.₁ (d 𝒟.∘ h) ∘ f ≈⟨ pushˡ D.homomorphism ⟩
+    D.₁ d ∘ D.₁ h ∘ f ≈⟨ Dd∘f≈Dd∘g  ⟩
+    D.₁ d ∘ D.₁ h ∘ g ≈⟨ pushˡ D.homomorphism  ⟨
+    D.₁ (d 𝒟.∘ h) ∘ g ∎}
+  where
+    open identified-in-diagram ident-hf-hg
+    open 𝒞.HomReasoning
 
 record identified-in-diagram₂ {P : 𝒞.Obj}
                               {i j : 𝒟.Obj}
