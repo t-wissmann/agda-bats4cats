@@ -46,6 +46,14 @@ record has-upper-bounds : Set (o ⊔ ℓ ⊔ e) where
   fin-is-above {ℕ.suc n} f Fin.zero = is-above₁ _ _
   fin-is-above {ℕ.suc n} f (Fin.suc k) = is-above₂ _ _ ∘ fin-is-above _ k
 
+UpperBound⇒has-upper-bounds : 𝒞.Obj → (∀ X Y → UpperBound X Y) → has-upper-bounds
+UpperBound⇒has-upper-bounds I upper = record
+   { non-empty = I
+   ; upper-bound = λ x y → UpperBound.obj (upper x y)
+   ; is-above₁ = λ x y → UpperBound.i₁ (upper x y)
+   ; is-above₂ = λ x y → UpperBound.i₂ (upper x y)
+   }
+
 -- The property that the diagram of every pair of parallel morphisms
 -- has a cocone. There is no name for this in nlab (https://ncatlab.org/nlab/show/filtered+category)
 -- nor in the Adamek/Rosicky-book. So let us call it 'merge
