@@ -21,6 +21,7 @@ private
 open import Categories.Diagram.Colimit.Hom-Colimit-Choice 𝒞
 open import Categories.Diagram.Hom-Factorization
 open import Categories.Object.Coproduct (𝒞)
+open import Categories.Object.Initial (𝒞)
 open import Categories.Morphism (𝒞)
 open import Categories.Morphism.Reasoning.Core 𝒞
 
@@ -189,3 +190,20 @@ presentable-coproduct {A} {B} coprod P⇒filtered A-pres B-pres 𝒟 𝒟-has-P 
         J.₁ m ∘ [f',g'] ∘ i₂        ≈⟨ sym-assoc ⟩
         (J.₁ m ∘ [f',g']) ∘ i₂
         ∎
+
+presentable-initial : (0𝒞 : 𝒞.Obj)
+  → IsInitial 0𝒞
+  → (∀ {𝒟} → Fil 𝒟 → filtered 𝒟) -- 'Fil' implies filtered
+  → presentable 0𝒞
+presentable-initial 0𝒞 0𝒞-initial Fil⇒filtered 𝒟 𝒟-has-P D D-colim =
+  hom-colim-construct
+    D-colim
+    (filtered.bounds 𝒟-filtered)
+    0𝒞
+    (λ f → triangle (filtered.non-empty 𝒟-filtered) ¡ (¡-unique₂ f _))
+    λ {i} f g x → i , (Category.id 𝒟) , (Category.id 𝒟) , ¡-unique₂ _ _
+  where
+    open IsInitial 0𝒞-initial 
+    𝒟-filtered : filtered 𝒟
+    𝒟-filtered = (Fil⇒filtered 𝒟-has-P)
+  
