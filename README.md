@@ -2,7 +2,10 @@ Batteries for Categories
 ========================
 
 This repositories adds some more concepts on top of
-[agda-categories](https://github.com/agda/agda-categories/).
+[agda-categories](https://github.com/agda/agda-categories/), most notably:
+
+* Factorization Systems
+* Presentable objects and Accessible Categories
 
 [HTML Documentation](https://t-wissmann.github.io/agda-bats4cats/)
 
